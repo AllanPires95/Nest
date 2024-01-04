@@ -24,11 +24,11 @@ export class UserController {
 
   @Get()
   async readUsers() {
-    return { users: [] };
+    return this.userService.readUsers();
   }
   @Get(':id')
   async read(@Param('id', ParseIntPipe) id: number) {
-    return { user: {}, id };
+    return this.userService.read(id);
   }
   @Put(':id')
   async update(

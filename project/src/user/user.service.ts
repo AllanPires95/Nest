@@ -10,4 +10,12 @@ export class UserService {
       data,
     });
   }
+  async readUsers() {
+    return this.prisma.user.findMany();
+  }
+  async read(id: number) {
+    return this.prisma.user.findUnique({
+      where: { id },
+    });
+  }
 }

@@ -8,12 +8,15 @@ import {
   Put,
   Delete,
   ParseIntPipe,
+  UseInterceptors,
 } from '@nestjs/common';
 import { CreateUserDTO } from './dto/create-user.dto';
 import { UpdatePutUserDTO } from './dto/update-put-user.dto';
 import { UpdatePathUserDTO } from './dto/update-patch-user.dto';
 import { UserService } from './user.service';
+import { LogInterceptor } from 'src/Interceptors/log.interceptor';
 
+@UseInterceptors(LogInterceptor)
 @Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
@@ -49,6 +52,6 @@ export class UserController {
   @Delete(':id')
   async delete(@Param('id', ParseIntPipe) id: number) {
     // ParseIntPipe is a pipe that converts the id parameter to a number
-    return { id };
+    return this.userService.delete(id);
   }
 }

@@ -5,6 +5,7 @@ import { AuthForgetDto } from "./dto/auth-forget.dto";
 import { AuthResetDto } from "./dto/auth-reset.dto";
 import { UserService } from "src/user/user.service";
 import { AuthService } from "./auth.service";
+import { AuthMetDto } from "./dto/auth-me.dto";
 
 @Controller('auth')
 export class AuthController{
@@ -18,7 +19,7 @@ export class AuthController{
     }
     @Post('register')
     async register(@Body() body: AuthRegisterDto){
-        return this.userService.create(body);
+        return this.authService.register(body);
     }
     @Post('forget')
     async forget(@Body() {email}: AuthForgetDto){
@@ -28,5 +29,8 @@ export class AuthController{
     async reset(@Body() {password, token}: AuthResetDto){
         this.authService.reset(password, token);
 }
-
+    @Post('me')
+    async me(@Body() body: AuthMetDto) {
+        return this.authService.checkToken(body.token);
+    }
 }

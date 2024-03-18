@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from "@nestjs/common";
+import { Body, Controller, Headers, Post, Req, UseGuards } from "@nestjs/common";
 import { AuthLoginDto } from "./dto/auth-login.dto";
 import { AuthRegisterDto } from "./dto/auth-register.dto";
 import { AuthForgetDto } from "./dto/auth-forget.dto";
@@ -6,6 +6,7 @@ import { AuthResetDto } from "./dto/auth-reset.dto";
 import { UserService } from "src/user/user.service";
 import { AuthService } from "./auth.service";
 import { AuthMetDto } from "./dto/auth-me.dto";
+import { AuthGuard } from "src/guards/auth.guard";
 
 @Controller('auth')
 export class AuthController{
@@ -29,8 +30,9 @@ export class AuthController{
     async reset(@Body() {password, token}: AuthResetDto){
         this.authService.reset(password, token);
 }
+    @UseGuards(AuthGuard)
     @Post('me')
-    async me(@Body() body: AuthMetDto) {
-        return this.authService.checkToken(body.token);
+    async me(@Req() req) {
+        return {me: 'ok', data: req.tokenPayload};
     }
 }
